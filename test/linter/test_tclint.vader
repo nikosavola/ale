@@ -1,0 +1,14 @@
+Before:
+  call ale#assert#SetUpLinterTest('tcl', 'tclint')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default tclint command should be correct):
+  AssertLinter 'tclint', ale#Escape('tclint') . ' -'
+
+Execute(The tclint executable and options should be configurable):
+  let b:ale_tcl_tclint_executable = 'foobar'
+  let b:ale_tcl_tclint_options = '--config tclint.toml'
+
+  AssertLinter 'foobar', ale#Escape('foobar') . ' --config tclint.toml -'
