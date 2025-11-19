@@ -1,0 +1,36 @@
+Before:
+  runtime ale_linters/tcl/tclint.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The tclint handler should parse lines correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'col': 6,
+  \     'type': 'W',
+  \     'text': 'unnecessary command substitution within expression',
+  \     'code': 'redundant-expr'
+  \   },
+  \   {
+  \     'lnum': 2,
+  \     'col': 3,
+  \     'type': 'W',
+  \     'text': 'too many args for puts: got 5, expected no more than 3',
+  \     'code': 'command-args'
+  \   },
+  \   {
+  \     'lnum': 5,
+  \     'col': 1,
+  \     'type': 'W',
+  \     'text': 'missing whitespace after opening brace',
+  \     'code': 'brace-whitespace'
+  \   },
+  \ ],
+  \ ale_linters#tcl#tclint#Handle(bufnr(''), [
+  \   'stdin:1:6: unnecessary command substitution within expression [redundant-expr]',
+  \   'stdin:2:3: too many args for puts: got 5, expected no more than 3 [command-args]',
+  \   'stdin:5:1: missing whitespace after opening brace [brace-whitespace]',
+  \ ])
